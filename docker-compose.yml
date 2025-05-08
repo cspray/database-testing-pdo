@@ -1,0 +1,57 @@
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: docker/postgres/Dockerfile
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    restart: unless-stopped
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      databasetesting:
+
+  mysql:
+    build:
+      context: .
+      dockerfile: docker/mysql/Dockerfile
+    volumes:
+      - mysqldata:/var/lib/mysql
+    ports:
+      - 3306:3306
+    restart: unless-stopped
+    environment:
+      - MYSQL_DATABASE=mysql
+      - MYSQL_USER=mysql
+      - MYSQL_PASSWORD=mysql
+      - MYSQL_ROOT_PASSWORD=mysql
+    networks:
+      databasetesting:
+
+  tests:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      target: app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+    volumes:
+      - ./src:/app/src
+      - ./tests:/app/tests
+      - ./resources:/app/resources
+      - ./phpunit.xml:/app/phpunit.xml
+      - ./composer.json:/app/composer.json
+    networks:
+      databasetesting:
+
+networks:
+  databasetesting:
+
+volumes:
+  mysqldata:
+  pgdata:

@@ -1,0 +1,23 @@
+{
+  "name": "cspray/database-testing-pdo",
+  "description": "PDO ConnectionAdapter for cspray/database-testing",
+  "require": {
+    "php": "^8.3",
+    "ext-pdo": "*",
+    "cspray/database-testing": "dev-main"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^11",
+    "roave/security-advisories": "dev-latest"
+  },
+  "autoload": {
+    "psr-4": {
+      "Cspray\\DatabaseTesting\\Pdo\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Cspray\\DatabaseTesting\\Pdo\\": "tests"
+    }
+  }
+}
