@@ -5,9 +5,7 @@ namespace Cspray\DatabaseTesting\Pdo;
 use Closure;
 use Cspray\DatabaseTesting\ConnectionAdapter\ConnectionAdapter;
 use Cspray\DatabaseTesting\ConnectionAdapter\ConnectionAdapterConfig;
-use Cspray\DatabaseTesting\DatabaseRepresentation\Table;
 use Cspray\DatabaseTesting\Exception\ConnectionNotEstablished;
-use Cspray\DatabaseTesting\Internal\ClosureDataProviderTable;
 use PDO;
 
 final class PdoConnectionAdapter implements ConnectionAdapter {
@@ -85,11 +83,8 @@ final class PdoConnectionAdapter implements ConnectionAdapter {
         }
     }
 
-    public function selectAll(string $name) : Table {
-        return new ClosureDataProviderTable(
-            $name,
-            fn() => $this->pdoDriver->selectAll($this->pdo, $name)
-        );
+    public function selectAll(string $name) : array {
+        return $this->pdoDriver->selectAll($this->pdo, $name);
     }
 
     private function validateConnectionEstablished(string $method) : void {
